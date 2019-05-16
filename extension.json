@@ -8,7 +8,9 @@
 	"type": "parserhook",
 	"callback": "TreeAndMenu::onRegistration",
 	"config": {
-		"TreeAndMenuPersistIfId": false,           "@": "Makes trees with id attributes have persistent state"
+		"TreeAndMenuPersistIfId": false,           "@": "Makes trees with id attributes have persistent state",
+		"TreeAndMenuSidebarMenuPage": false,           "@": "Specify menu page to be used as a sidebar menu",
+		"TreeAndMenuSidebarMenuHeading": false,           "@": "Specify the heading line for sidebar menu"
 	},
 	"AutoloadClasses": {
 		"TreeAndMenu": "TreeAndMenu_body.php"
@@ -18,6 +20,11 @@
 	},
 	"MessagesDirs": {
 		"TreeAndMenu": ["i18n"]
+	},
+	"Hooks": {
+		"SkinBuildSidebar": [
+			"TreeAndMenu::onSkinBuildSidebar"
+		]
 	},
 	"ResourceModules": {
 		"ext.fancytree": {
