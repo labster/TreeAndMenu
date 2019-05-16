@@ -134,4 +134,43 @@ class TreeAndMenu {
 
 		return array( $html, 'isHTML' => true, 'noparse' => true );
 	}
+
+	/**
+	 * @param Skin $skin
+	 * @param array $bar
+	 */
+	public static function onSkinBuildSidebar( $skin, &$bar ) {
+		global $wgTreeAndMenuSidebarMenuPage, $wgTreeAndMenuSidebarMenuHeading;
+		if( $wgTreeAndMenuSidebarMenuPage ) {
+			$title = Title::newFromText( $wgTreeAndMenuSidebarMenuPage );
+			if( $title && $title->exists() && !$skin->getOutput()->getTitle()->equals( $title ) ) {
+				$html = self::getTreeHtmlFromPage( $title, $skin->getOutput() );
+				$bar[ $wgTreeAndMenuSidebarMenuHeading ? $wgTreeAndMenuSidebarMenuHeading : 'Outline' ] = $html;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @param Title $title
+	 * @param OutputPage $out
+	 *
+	 * @return string
+	 * @throws MWException
+	 */
+	protected static function getTreeHtmlFromPage( $title, $out ) {
+		$html = '';
+		// For 1.32+
+		if( method_exists( $out, 'parseAsContent' ) ) {
+			$html = $out->parseAsContent(
+				WikiPage::newFromID( $title->getArticleID() )->getContent()
+					->getWikitextForTransclusion() );
+		}else{
+			// For b/c
+			$article = new Article( $title );
+			$html = $out->parse( $article->getContent() );
+		}
+		return $html;
+	}
+
 }
