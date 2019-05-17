@@ -159,16 +159,13 @@ class TreeAndMenu {
 	 * @throws MWException
 	 */
 	protected static function getTreeHtmlFromPage( $title, $out ) {
-		$html = '';
+		$content = WikiPage::newFromID( $title->getArticleID() )->getContent();
+		if( is_object( $content ) ) $content = $content->getWikitextForTransclusion();
 		// For 1.32+
 		if( method_exists( $out, 'parseAsContent' ) ) {
-			$html = $out->parseAsContent(
-				WikiPage::newFromID( $title->getArticleID() )->getContent()
-					->getWikitextForTransclusion() );
-		}else{
-			// For b/c
-			$article = new Article( $title );
-			$html = $out->parse( $article->getContent() );
+			$html = $out->parseAsContent( $content );
+		} else {
+			$html = $out->parse( $content );
 		}
 		return $html;
 	}
