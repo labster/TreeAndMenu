@@ -27,28 +27,26 @@
 		]
 	},
 	"ResourceModules": {
-		"ext.fancytree": {
+		"ext.treeandmenu": {
+			"styles": ["fancytree/fancytree.css", "suckerfish/suckerfish.css"],
 			"scripts": [
-				"jquery.fancytree.js",
-				"jquery.fancytree.persist.js",
-				"jquery.fancytree.mediawiki.js",
-				"fancytree.js"
+				"fancytree/jquery.fancytree.js",
+				"fancytree/jquery.fancytree.persist.js",
+				"fancytree/jquery.fancytree.mediawiki.js",
+				"fancytree/fancytree.js",
+				"suckerfish/suckerfish.js"
 			],
 			"dependencies": [
 				"jquery.ui.core",
 				"jquery.ui.widget",
 				"jquery.effects.blind",
-				"jquery.cookie"
+				"jquery.cookie",
+				"jquery.client"
 			]
-		},
-		"ext.suckerfish": {
-			"scripts": ["suckerfish.js"],
-			"dependencies": ["jquery.client"]
 		}
 	},
-	"@": "The paths will be populated later as it needs be calculated",
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
-		"remoteExtPath": ""
+		"remoteExtPath": "TreeAndMenu"
 	}
 }
