@@ -88,8 +88,8 @@ class TreeAndMenu {
 
 		// Determine the class and id attributes
 		$class = $type == TREEANDMENU_TREE ? 'fancytree' : 'suckerfish';
-		if( array_key_exists( 'class', $atts ) ) $class .= ' ' . $atts['class'];
-		$id = array_key_exists( 'id', $atts ) ? ' id="' . $atts['id'] . '"' : '';
+		if( array_key_exists( 'class', $atts ) ) $class .= ' ' . Sanitizer::escapeClass( $atts['class'] );
+		$id = array_key_exists( 'id', $atts ) ? ' id="' . Sanitizer::escapeClass( $atts['id'] ) . '"' : '';
 
 		// If its a tree, we need to add some code to the ul structure
 		if( $type == TREEANDMENU_TREE ) {
