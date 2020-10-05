@@ -37,9 +37,7 @@
 				"suckerfish/suckerfish.js"
 			],
 			"dependencies": [
-				"jquery.ui.core",
-				"jquery.ui.widget",
-				"jquery.effects.blind",
+				"jquery.ui",
 				"jquery.cookie",
 				"jquery.client"
 			]
