@@ -30,7 +30,6 @@ class TreeAndMenu {
 
 		// Scripts and styles
 		$wgOut->addModules( 'ext.treeandmenu' );
-		$wgOut->addModuleStyles( 'ext.treeandmenu' );
 	}
 
 	/**
