@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 class TreeAndMenu {
 
 	public static $instance = null;
@@ -18,11 +21,12 @@ class TreeAndMenu {
 	 * Called at extension setup time, install hooks and module resources
 	 */
 	public function setup() {
-		global $wgOut, $wgParser;
+		global $wgOut;
 
 		// Add parser hooks
-		$wgParser->setFunctionHook( 'tree', [$this, 'expandTree'] );
-		$wgParser->setFunctionHook( 'menu', [$this, 'expandMenu'] );
+		$parser = MediaWikiServices::getInstance()->getParser();
+		$parser->setFunctionHook( 'tree', [$this, 'expandTree'] );
+		$parser->setFunctionHook( 'menu', [$this, 'expandMenu'] );
 
 		// Scripts and styles
 		$wgOut->addModules( 'ext.treeandmenu' );
