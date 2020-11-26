@@ -46,5 +46,6 @@
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
 		"remoteExtPath": "TreeAndMenu"
-	}
+	},
+	"manifest_version": 1
 }
