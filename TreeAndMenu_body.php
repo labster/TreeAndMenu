@@ -86,8 +86,9 @@ class TreeAndMenu {
 
 		// Parse the bullets to HTML
 		$opt = $parser->getOptions();
-		if( method_exists( $opt, 'setWrapOutputClass' ) ) $opt->setWrapOutputClass( false );
-		$html = $parser->parse( $bullets, $parser->getTitle(), $opt, true, false )->getText();
+		$html = $parser->parse( $bullets, $parser->getTitle(), $opt, true, false )->getText(
+			[ 'unwrap' => true ]
+		);
 
 		// Determine the class and id attributes
 		$class = $type == TREEANDMENU_TREE ? 'fancytree' : 'suckerfish';
@@ -100,7 +101,10 @@ class TreeAndMenu {
 			// Mark the structure as tree data, wrap in an unclosable top level if root arg passed (and parse root content)
 			$tree = '<ul id="treeData" style="display:none">';
 			if( array_key_exists( 'root', $atts ) ) {
-				$root = $parser->parse( $atts['root'], $parser->getTitle(), $parser->getOptions(), false, false )->getText();
+				$root = $parser->parse( $atts['root'], $parser->getTitle(), $parser->getOptions(), false, false )->getText(
+					[ 'unwrap' => true ]
+				);
+				$root = $parser->stripOuterParagraph( $root );
 				$html = $tree . '<li class="root">' . $root . $html . '</li></ul>';
 				if( !array_key_exists( 'minExpandLevel', $opts ) ) $opts['minExpandLevel'] = 2;
 			} else $html = preg_replace( '|<ul>|', $tree, $html, 1 );
