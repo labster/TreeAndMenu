@@ -14,7 +14,7 @@ class TreeAndMenu {
 		define( 'TREEANDMENU_TREE', 1 );
 		define( 'TREEANDMENU_MENU', 2 );
 		self::$instance = new self();
-		$wgExtensionFunctions[] = [self::$instance, 'setup'];
+		$wgExtensionFunctions[] = [ self::$instance, 'setup' ];
 	}
 
 	/**
@@ -25,8 +25,8 @@ class TreeAndMenu {
 
 		// Add parser hooks
 		$parser = MediaWikiServices::getInstance()->getParser();
-		$parser->setFunctionHook( 'tree', [$this, 'expandTree'] );
-		$parser->setFunctionHook( 'menu', [$this, 'expandMenu'] );
+		$parser->setFunctionHook( 'tree', [ $this, 'expandTree' ] );
+		$parser->setFunctionHook( 'menu', [ $this, 'expandMenu' ] );
 
 		// Scripts and styles
 		$wgOut->addModules( 'ext.treeandmenu' );
@@ -74,21 +74,27 @@ class TreeAndMenu {
 					}
 					$opts[$m[1]] = $val;
 				}
-			} else $opts[$arg] = true;
+			} else {
+				$opts[$arg] = true;
+			}
 		}
 
 		// If the $wgTreeAndMenuPersistIfId global is set and an ID is present, add the persist extension
-		if( array_key_exists( 'id', $atts ) && $wgTreeAndMenuPersistIfId ) {
-			if( array_key_exists( 'extensions', $opts ) ) $opts['extensions'][] = 'persist';
-			else $opts['extensions'] = ['persist'];
+		if ( array_key_exists( 'id', $atts ) && $wgTreeAndMenuPersistIfId ) {
+			if ( array_key_exists( 'extensions', $opts ) ) {
+				$opts['extensions'][] = 'persist';
+			} else {
+				$opts['extensions'] = [ 'persist' ];
+			}
 		}
 
 		// Sanitise the bullet structure (remove empty lines and empty bullets)
 		$bullets = preg_replace( '|^\*+\s*$|m', '', $bullets );
 		$bullets = preg_replace( '|\n+|', "\n", $bullets );
 
-		// If it's a tree, wrap the item in a span so FancyTree treats it as HTML and put nowiki tags around any JSON props
-		if( $type == TREEANDMENU_TREE ) {
+		// If it's a tree,
+		// wrap the item in a span so FancyTree treats it as HTML and put nowiki tags around any JSON props
+		if ( $type == TREEANDMENU_TREE ) {
 			$bullets = preg_replace( '|^(\*+)(.+?)$|m', '$1<span>$2</span>', $bullets );
 			$bullets = preg_replace( '|^(.*?)(\{.+\})|m', '$1<nowiki>$2</nowiki>', $bullets );
 		}
@@ -101,22 +107,29 @@ class TreeAndMenu {
 
 		// Determine the class and id attributes
 		$class = $type == TREEANDMENU_TREE ? 'fancytree' : 'suckerfish';
-		if( array_key_exists( 'class', $atts ) ) $class .= ' ' . Sanitizer::escapeClass( $atts['class'] );
+		if ( array_key_exists( 'class', $atts ) ) {
+			$class .= ' ' . Sanitizer::escapeClass( $atts['class'] );
+		}
 		$id = array_key_exists( 'id', $atts ) ? ' id="' . Sanitizer::escapeClass( $atts['id'] ) . '"' : '';
 
 		// If its a tree, we need to add some code to the ul structure
-		if( $type == TREEANDMENU_TREE ) {
+		if ( $type == TREEANDMENU_TREE ) {
 
-			// Mark the structure as tree data, wrap in an unclosable top level if root arg passed (and parse root content)
+			// Mark the structure as tree data,
+			// wrap in an unclosable top level if root arg passed (and parse root content)
 			$tree = '<ul id="treeData" style="display:none">';
-			if( array_key_exists( 'root', $atts ) ) {
+			if ( array_key_exists( 'root', $atts ) ) {
 				$root = $parser->parse( $atts['root'], $parser->getTitle(), $parser->getOptions(), false, false )->getText(
 					[ 'unwrap' => true ]
 				);
 				$root = $parser->stripOuterParagraph( $root );
 				$html = $tree . '<li class="root">' . $root . $html . '</li></ul>';
-				if( !array_key_exists( 'minExpandLevel', $opts ) ) $opts['minExpandLevel'] = 2;
-			} else $html = preg_replace( '|<ul>|', $tree, $html, 1 );
+				if ( !array_key_exists( 'minExpandLevel', $opts ) ) {
+					$opts['minExpandLevel'] = 2;
+				}
+			} else {
+				$html = preg_replace( '|<ul>|', $tree, $html, 1 );
+			}
 
 			// Replace any json: markup in nodes into the li
 			$html = preg_replace( '|<li(>\s*\{.*?\"class\":\s*"(.+?)")|', "<li class='$2'$1", $html );
@@ -124,30 +137,33 @@ class TreeAndMenu {
 			$html = preg_replace( '|<(li[^>]*)>\s*(.+?)\s*(\{.+\})\s*|', "<$1 data-json='$3'>$2", $html );
 
 			// Incorporate options as json encoded data in a div
-			$opts = count( $opts ) > 0 ? '<div class="opts" style="display:none">' . json_encode( $opts, JSON_NUMERIC_CHECK ) . '</div>' : '';
+			$opts = count( $opts ) > 0
+				? '<div class="opts" style="display:none">' . json_encode( $opts, JSON_NUMERIC_CHECK ) . '</div>'
+				: '';
 
 			// Assemble it all into a single div
 			$html = "<div class=\"$class todo\"$id>$opts$html</div>";
+		} else {
+			// If its a menu, just add the class and id attributes to the ul
+			$html = preg_replace( '|<ul>|', "<ul class=\"$class todo\"$id>", $html, 1 );
 		}
-
-		// If its a menu, just add the class and id attributes to the ul
-		else $html = preg_replace( '|<ul>|', "<ul class=\"$class todo\"$id>", $html, 1 );
 
 		// Append script to prepare this tree or menu if page is already loaded
 		$html .= "<script type=\"$wgJsMimeType\">if('prepareTAM' in window) window.prepareTAM();</script>";
 
-		return [$html, 'isHTML' => true, 'noparse' => true];
+		return [ $html, 'isHTML' => true, 'noparse' => true ];
 	}
 
 	/**
 	 * @param Skin $skin
-	 * @param array $bar
+	 * @param array &$bar
+	 * @return bool true
 	 */
 	public static function onSkinBuildSidebar( $skin, &$bar ) {
 		global $wgTreeAndMenuSidebarMenuPage, $wgTreeAndMenuSidebarMenuHeading;
-		if( $wgTreeAndMenuSidebarMenuPage ) {
+		if ( $wgTreeAndMenuSidebarMenuPage ) {
 			$title = Title::newFromText( $wgTreeAndMenuSidebarMenuPage );
-			if( $title && $title->exists() && !$skin->getOutput()->getTitle()->equals( $title ) ) {
+			if ( $title && $title->exists() && !$skin->getOutput()->getTitle()->equals( $title ) ) {
 				$html = self::getTreeHtmlFromPage( $title, $skin->getOutput() );
 				$bar[ $wgTreeAndMenuSidebarMenuHeading ? $wgTreeAndMenuSidebarMenuHeading : 'Outline' ] = $html;
 			}
@@ -158,15 +174,16 @@ class TreeAndMenu {
 	/**
 	 * @param Title $title
 	 * @param OutputPage $out
-	 *
 	 * @return string
 	 * @throws MWException
 	 */
 	protected static function getTreeHtmlFromPage( $title, $out ) {
 		$content = WikiPage::newFromID( $title->getArticleID() )->getContent();
-		if( is_object( $content ) ) $content = $content->getWikitextForTransclusion();
+		if ( is_object( $content ) ) {
+			$content = $content->getWikitextForTransclusion();
+		}
 		// For 1.32+
-		if( method_exists( $out, 'parseAsContent' ) ) {
+		if ( method_exists( $out, 'parseAsContent' ) ) {
 			$html = $out->parseAsContent( $content );
 		} else {
 			$html = $out->parse( $content );
