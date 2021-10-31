@@ -79,9 +79,10 @@ class TreeAndMenu {
 			}
 		}
 
-		// If the $wgTreeAndMenuPersistIfId global is set and an ID is present, add the persist extension
+		// If the $wgTreeAndMenuPersistIfId global is set and an ID is present,
+		// add the persist extension unless it was already added manually
 		if ( array_key_exists( 'id', $atts ) && $wgTreeAndMenuPersistIfId ) {
-			if ( array_key_exists( 'extensions', $opts ) ) {
+			if ( array_key_exists( 'extensions', $opts ) && !in_array( 'persist', $opts['extensions'] ) ) {
 				$opts['extensions'][] = 'persist';
 			} else {
 				$opts['extensions'] = [ 'persist' ];
