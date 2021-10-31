@@ -1,7 +1,10 @@
 {
 	"name": "TreeAndMenu",
-	"version": "4.2.4, 2019-11-20",
-	"author": ["[http://www.organicdesign.co.nz/aran Aran Dunkley]"],
+	"version": "4.2.5, 2021-10-31",
+	"author": [
+		"[http://www.organicdesign.co.nz/aran Aran Dunkley]",
+		"[http://absorto.dev Igor Absorto]"
+	],
 	"url": "http://www.mediawiki.org/wiki/Extension:TreeAndMenu",
 	"descriptionmsg": "treeandmenu-desc",
 	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",

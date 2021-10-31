@@ -58,13 +58,22 @@ class TreeAndMenu {
 		$parser = array_shift( $args );
 		$bullets = array_pop( $args );
 
-		// Convert other args (except class, id, root) into named opts to pass to JS (JSON values are allowed, name-only treated as bool)
+		// Convert other args into named opts to pass to JS (JSON values are allowed, name-only treated as bool)
+		// Args 'class', 'id' and 'root' are not converted
 		$opts = [];
 		$atts = [];
-		foreach( $args as $arg ) {
-			if( preg_match( '/^(\\w+?)\\s*=\\s*(.+)$/s', $arg, $m ) ) {
-				if( $m[1] == 'class' || $m[1] == 'id' || $m[1] == 'root' ) $atts[$m[1]] = $m[2];
-				else $opts[$m[1]] = preg_match( '|^[\[\{]|', $m[2] ) ? json_decode( $m[2] ) : $m[2];
+		foreach ( $args as $arg ) {
+			if ( preg_match( '/^(\\w+?)\\s*=\\s*(.+)$/s', $arg, $m ) ) {
+				if ( $m[1] == 'class' || $m[1] == 'id' || $m[1] == 'root' ) {
+					$atts[$m[1]] = $m[2];
+				} else {
+					$val = preg_match( '|^[\[\{]|', $m[2] ) ? json_decode( $m[2] ) : $m[2];
+					// False values must be converted to work with fancytree strick type check
+					if ( !is_bool( $val ) && preg_match( "/false/i", $val ) ) {
+						$val = 0;
+					}
+					$opts[$m[1]] = $val;
+				}
 			} else $opts[$arg] = true;
 		}
 
