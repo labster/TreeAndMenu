@@ -43,6 +43,10 @@
 				"jquery.ui",
 				"jquery.cookie",
 				"jquery.client"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
 			]
 		}
 	},
