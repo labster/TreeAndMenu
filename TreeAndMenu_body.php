@@ -69,7 +69,7 @@ class TreeAndMenu {
 				} else {
 					$val = preg_match( '|^[\[\{]|', $m[2] ) ? json_decode( $m[2] ) : $m[2];
 					// False values must be converted to work with fancytree strick type check
-					if ( !is_bool( $val ) && preg_match( "/false/i", $val ) ) {
+					if ( is_string( $val ) && preg_match( "/false/i", $val ) ) {
 						$val = 0;
 					}
 					$opts[$m[1]] = $val;
