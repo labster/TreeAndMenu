@@ -11,9 +11,21 @@
 	"type": "parserhook",
 	"callback": "TreeAndMenu::onRegistration",
 	"config": {
-		"TreeAndMenuPersistIfId": false,           "@": "Makes trees with id attributes have persistent state",
-		"TreeAndMenuSidebarMenuPage": false,           "@": "Specify menu page to be used as a sidebar menu",
-		"TreeAndMenuSidebarMenuHeading": false,           "@": "Specify the heading line for sidebar menu"
+		"TreeAndMenuPersistIfId": {
+			"description": "Makes trees with id attributes have persistent state",
+			"public": true,
+			"value": false
+		},
+		"TreeAndMenuSidebarMenuPage": {
+			"description": "Specify menu page to be used as a sidebar menu",
+			"public": true,
+			"value": false
+		},
+		"TreeAndMenuSidebarMenuHeading": {
+			"description": "Specify the heading line for sidebar menu",
+			"public": true,
+			"value": false
+		}
 	},
 	"AutoloadClasses": {
 		"TreeAndMenu": "TreeAndMenu_body.php"
