@@ -5,15 +5,27 @@
 		"[http://www.organicdesign.co.nz/aran Aran Dunkley]",
 		"[http://absorto.dev Igor Absorto]"
 	],
-	"url": "http://www.mediawiki.org/wiki/Extension:TreeAndMenu",
+	"url": "https://www.mediawiki.org/wiki/Extension:TreeAndMenu",
 	"descriptionmsg": "treeandmenu-desc",
 	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
 	"type": "parserhook",
 	"callback": "TreeAndMenu::onRegistration",
 	"config": {
-		"TreeAndMenuPersistIfId": false,           "@": "Makes trees with id attributes have persistent state",
-		"TreeAndMenuSidebarMenuPage": false,           "@": "Specify menu page to be used as a sidebar menu",
-		"TreeAndMenuSidebarMenuHeading": false,           "@": "Specify the heading line for sidebar menu"
+		"TreeAndMenuPersistIfId": {
+			"description": "Makes trees with id attributes have persistent state",
+			"public": true,
+			"value": false
+		},
+		"TreeAndMenuSidebarMenuPage": {
+			"description": "Specify menu page to be used as a sidebar menu",
+			"public": true,
+			"value": false
+		},
+		"TreeAndMenuSidebarMenuHeading": {
+			"description": "Specify the heading line for sidebar menu",
+			"public": true,
+			"value": false
+		}
 	},
 	"AutoloadClasses": {
 		"TreeAndMenu": "TreeAndMenu_body.php"
@@ -25,9 +37,7 @@
 		"TreeAndMenu": ["i18n"]
 	},
 	"Hooks": {
-		"SkinBuildSidebar": [
-			"TreeAndMenu::onSkinBuildSidebar"
-		]
+		"SkinBuildSidebar": "TreeAndMenu::onSkinBuildSidebar"
 	},
 	"ResourceModules": {
 		"ext.treeandmenu": {
@@ -41,7 +51,7 @@
 			],
 			"dependencies": [
 				"jquery.ui",
-				"jquery.cookie",
+				"mediawiki.cookie",
 				"jquery.client"
 			],
 			"targets": [
@@ -54,5 +64,5 @@
 		"localBasePath": "",
 		"remoteExtPath": "TreeAndMenu"
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }
