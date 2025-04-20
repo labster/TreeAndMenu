@@ -166,10 +166,23 @@ class TreeAndMenu {
 			$title = Title::newFromText( $wgTreeAndMenuSidebarMenuPage );
 			if ( $title && $title->exists() && !$skin->getOutput()->getTitle()->equals( $title ) ) {
 				$html = self::getTreeHtmlFromPage( $title, $skin->getOutput() );
-				$bar[ $wgTreeAndMenuSidebarMenuHeading ? $wgTreeAndMenuSidebarMenuHeading : 'Outline' ] = $html;
+				// Create empty heading for SkinAfterPortlet to attach content to
+				$bar[ $wgTreeAndMenuSidebarMenuHeading ? $wgTreeAndMenuSidebarMenuHeading : 'Outline' ] = [];
 			}
 		}
 		return true;
+	}
+
+	public static function onSkinAfterPortlet( Skin $skin, string $portletName, string &$html ) {
+		global $wgTreeAndMenuSidebarMenuPage, $wgTreeAndMenuSidebarMenuHeading;
+		$headingName = $wgTreeAndMenuSidebarMenuHeading ? $wgTreeAndMenuSidebarMenuHeading : 'Outline';
+
+		if ( $wgTreeAndMenuSidebarMenuPage && $portletName === $headingName ) {
+			$title = Title::newFromText( $wgTreeAndMenuSidebarMenuPage );
+			if ( $title && $title->exists() && !$skin->getOutput()->getTitle()->equals( $title ) ) {
+				$html .= self::getTreeHtmlFromPage( $title, $skin->getOutput() );
+			}
+		}
 	}
 
 	/**

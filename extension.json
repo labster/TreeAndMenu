@@ -37,7 +37,11 @@
 		"TreeAndMenu": ["i18n"]
 	},
 	"Hooks": {
-		"SkinBuildSidebar": "TreeAndMenu::onSkinBuildSidebar"
+		"SkinBuildSidebar": "TreeAndMenu::onSkinBuildSidebar",
+		"SkinAfterPortlet": "TreeAndMenu::onSkinAfterPortlet"
+	},
+	"requires": {
+		"MediaWiki": ">= 1.35.0"
 	},
 	"ResourceModules": {
 		"ext.treeandmenu": {
